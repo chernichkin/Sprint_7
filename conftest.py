@@ -2,21 +2,13 @@ import requests
 import random
 import string
 import pytest
-
 from constants import Constants
-
-
-@pytest.fixture
-def generate_random_string():
-    letters = string.ascii_lowercase
-    random_string = ''.join(random.choice(letters) for i in range(7))
-    return random_string
-
+from helper import Helper
 
 @pytest.fixture
-def create_new_courier_and_del(generate_random_string):
-    password = generate_random_string
-    login = generate_random_string
+def create_new_courier_and_del():
+    password = Helper.generate_random_string()
+    login = Helper.generate_random_string()
     user = {'login': login, "password": password, "firstName": "saske"}
     user_login = {'login': login, "password": password}
     yield user

@@ -2,25 +2,20 @@ import json
 
 import pytest
 import requests
+import allure
+from data import Data
 
 from constants import Constants
 
 
 class TestCreateNewOrder:
+
+    @allure.title('Проверка создания нового заказа')
     @pytest.mark.parametrize('color', [["GREY"], ["BLACK"], ["BLACK", "GREY"], []])
     def test_create_new_order_api(self, color):
-        payload = json.dumps({
-            "firstName": "Anton",
-            "lastName": "Tupov",
-            "address": "Извилистая, 13",
-            "metroStation": 4,
-            "phone": "+7 999 99 99 99",
-            "rentTime": 5,
-            "deliveryDate": "2020-06-06",
-            "comment": "Я ничего не понимаю уже, дайте самокат",
-            "color": color
-        })
-
-        response = requests.post(Constants.URL + '/api/v1/orders', data=payload)
+        def_user = Data.default_user.copy()
+        def_user["color"] = color
+        payload = json.dumps(def_user)
+        response = requests.post(Constants.URL + Constants.END_ORDERS, data=payload)
         r = response.json()
         assert 'track' in r
